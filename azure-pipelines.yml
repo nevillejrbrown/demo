@@ -69,4 +69,4 @@ steps:
     azureSubscription: 'DemoWebAppServiceConnection'
     appType: webApp
     appName: 'NevillejrbrownDemoApp'
-    package: $(System.DefaultWorkingDirectory)/**/*.zip 
+    package: $(Build.ArtifactStagingDirectory)/**/*.zip 
