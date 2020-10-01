@@ -14,9 +14,22 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
+resources:
+  repositories:
+  - repository: DemoRepo
+    type: github
+    endpoint: nevillejrbrown
+    name: nevillejrbrown/demo
+  
+  - repository: DemoTestRepo
+    type: github
+    endpoint: nevillejrbrown
+    name: nevillejrbrown/DemoTest
 
-- checkout: github://nevillejrbrown/demo
+steps:
+- checkout: DemoRepo
+- checkout: DemoTestRepo
+
 
 - task: NuGetToolInstaller@1
 
