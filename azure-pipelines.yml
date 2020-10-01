@@ -62,3 +62,11 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
     artifactName: 'DemoSite' 
+
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'DemoWebAppServiceConnection'
+    appType: webApp
+    appName: 'NevillejrbrownDemoApp'
+    package: $(System.DefaultWorkingDirectory)/**/*.zip 
