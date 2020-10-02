@@ -32,9 +32,9 @@ resources:
     name: nevillejrbrown/DemoUITests
 
 steps:
+- checkout: DemoRepo
+- checkout: DemoTestRepo
 - checkout: UITestRepo
-- checkout: DemoTestRepo
-- checkout: DemoTestRepo
 
 
 - task: NuGetToolInstaller@1
