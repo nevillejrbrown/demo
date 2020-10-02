@@ -26,8 +26,14 @@ resources:
     endpoint: nevillejrbrown
     name: nevillejrbrown/DemoTest
 
+  - repository: UITestRepo
+    type: github
+    endpoint: nevillejrbrown
+    name: nevillejrbrown/DemoUITests
+
 steps:
-- checkout: DemoRepo
+- checkout: UITestRepo
+- checkout: DemoTestRepo
 - checkout: DemoTestRepo
 
 
@@ -47,7 +53,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: '**/*Test/*.csproj'
+    projects: '**/DemoTest/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
