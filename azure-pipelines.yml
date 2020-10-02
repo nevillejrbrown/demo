@@ -14,7 +14,23 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+resources:
+  repositories:
+  - repository: DemoRepo
+    type: github
+    endpoint: nevillejrbrown
+    name: nevillejrbrown/demo
+  
+  - repository: DemoTestRepo
+    type: github
+    endpoint: nevillejrbrown
+    name: nevillejrbrown/DemoTest
+
 steps:
+- checkout: DemoRepo
+- checkout: DemoTestRepo
+
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
@@ -28,13 +44,29 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-#- task: VSTest@2
-#  inputs:
-#    platform: '$(buildPlatform)'
-#    configuration: '$(buildConfiguration)'
-
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: '../**/*Test/*.csproj'
+    projects: '**/*Test/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+# this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'DemoSite' 
+
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'DemoWebAppServiceConnection'
+    appType: webApp
+    appName: 'NevillejrbrownDemoApp'
+    package: $(Build.ArtifactStagingDirectory)/demo.zip 
